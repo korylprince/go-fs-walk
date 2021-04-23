@@ -10,7 +10,7 @@ import (
 	walk "github.com/korylprince/go-fs-walk"
 )
 
-func unluckyFilter(fi fs.FileInfo, path string, err error) error {
+func UnluckyFilter(fi fs.FileInfo, path string, err error) error {
 	//skip files and folders named 13
 	if strings.TrimSuffix(fi.Name(), filepath.Ext(fi.Name())) == "13" {
 		return walk.SkipRecurse
@@ -18,9 +18,9 @@ func unluckyFilter(fi fs.FileInfo, path string, err error) error {
 	return nil
 }
 
-func main() {
+func Example_cursorWalk() {
 	c := walk.New("/path/to/root")
-	c.RegisterFilterFunc("unlucky", unluckyFilter)
+	c.RegisterFilterFunc("unlucky", UnluckyFilter)
 	for fi, path, err := c.Next(); err != io.EOF; fi, path, err = c.Next() {
 		if err != nil {
 			panic(err)
