@@ -48,16 +48,7 @@ func recurseFile(r io.Reader, path string, out chan<- *file, cntl <-chan error) 
 }
 
 func recurseFS(rfs fs.FS, rootPath string, out chan<- *file, cntl <-chan error) error {
-	//FIXME remove once https://github.com/golang/go/issues/45345 is fixed
-	seen := make(map[string]struct{})
-
 	return fs.WalkDir(rfs, ".", func(path string, d fs.DirEntry, err error) error {
-		//FIXME: see above
-		if _, ok := seen[path]; ok && d.IsDir() {
-			return fs.SkipDir
-		}
-		seen[path] = struct{}{}
-
 		fp := filepath.Join(rootPath, path)
 
 		if err != nil {
